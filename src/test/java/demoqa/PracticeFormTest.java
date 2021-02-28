@@ -6,9 +6,11 @@ import com.codeborne.selenide.logevents.SelenideLogger;
 import com.github.javafaker.Faker;
 import io.qameta.allure.*;
 import io.qameta.allure.selenide.AllureSelenide;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.text.DateFormatSymbols;
 import java.util.Calendar;
@@ -18,6 +20,7 @@ import java.util.Locale;
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.*;
+import static helpers.AttachmentsHelper.*;
 import static io.qameta.allure.Allure.step;
 import static io.qameta.allure.SeverityLevel.CRITICAL;
 import static utils.Randomizer.*;
@@ -30,8 +33,23 @@ public class PracticeFormTest {
 
     @BeforeEach
     void setUp() {
-        Configuration.browserSize = "1540x1080";
         SelenideLogger.addListener("allure", new AllureSelenide());
+
+        DesiredCapabilities capabilities = new DesiredCapabilities();
+        capabilities.setCapability("enableVNC", true);
+        capabilities.setCapability("enableVideo", true);
+        Configuration.browserCapabilities = capabilities;
+        Configuration.browserSize = "1540x1080";
+        Configuration.remote = "https://user1:1234@selenoid.autotests.cloud:4444/wd/hub/";
+    }
+
+    @AfterEach
+    void afterEach() {
+        attachVideo();
+        attachPageSource();
+        attachScreenshot("Last screenshot");
+        attachAsText("Browser console logs", getConsoleLogs());
+        closeWebDriver();
     }
 
     @Test
@@ -124,17 +142,48 @@ public class PracticeFormTest {
         });
 
         step("Проверка заполненной формы", () -> {
-            tableResponsive.shouldHave(
-                    text("Student Name " + firstName + " " + lastName),
-                    text("Student Email " + userEmail),
-                    text("Gender " + gender),
-                    text("Mobile " + userNumber),
-                    text("Date of Birth " + String.format("%02d", date.get(Calendar.DAY_OF_MONTH)) + " " + monthOfBirth + "," + yearOfBirth),
-                    text("Picture " + picture),
-                    text("Address " + currentAddress),
-                    text("State and City " + state + " " + city));
+            tableResponsive.shouldHave(text("Student Name " + firstName + " " + lastName));
+            tableResponsive.shouldHave(text("Student Email " + userEmail));
+            tableResponsive.shouldHave(text("Gender " + gender));
+            tableResponsive.shouldHave(text("Mobile " + userNumber));
+            tableResponsive.shouldHave(text("Date of Birth " + String.format("%02d", date.get(Calendar.DAY_OF_MONTH)) + " " + monthOfBirth + "," + yearOfBirth));
+            tableResponsive.shouldHave(text("Picture " + picture));
+            tableResponsive.shouldHave(text("Address " + currentAddress));
+            tableResponsive.shouldHave(text("State and City " + state + " " + city));
             checkByList(subjects);
             checkByList(hobbies);
+        });
+    }
+
+    @Test
+    @Owner("GorbatenkoVA")
+    @Link(name = "Base URL", value = BASE_URL)
+    @Feature("Registration form")
+    @Story("Неуспешная регистрация")
+    @DisplayName("Негативный тест.")
+    void checkNegativeTest() {
+        String firstName = faker.name().firstName();
+        String lastName = faker.name().lastName();
+
+        step("Открываем страницу регистрации", () -> {
+            open(BASE_URL);
+        });
+
+        step("Заполнение имени " + firstName, () -> {
+            $("#firstName").val(firstName);
+        });
+
+        step("Заполнение фамилии " + lastName, () -> {
+            $("#lastName").setValue(lastName);
+        });
+
+        step("Отправка формы", () -> {
+            $("#submit").click();
+        });
+
+        step("Проверка заполненной формы", () -> {
+            tableResponsive.shouldHave(
+                    text("Student Name " + firstName + " " + lastName));
         });
     }
 
