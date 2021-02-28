@@ -6,6 +6,8 @@ import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
@@ -44,5 +46,15 @@ public class AttachmentsHelper {
 
     public static String getConsoleLogs() {
         return String.join("\n", Selenide.getWebDriverLogs(BROWSER));
+    }
+
+    public static void setEnvironmentAllure(String key, String value) {
+        String text = key + "=" + value + "\n";
+
+        try (FileOutputStream fos = new FileOutputStream("allure-results/environment.properties")) {
+            byte[] buffer = text.getBytes();
+            fos.write(buffer, 0, buffer.length);
+        } catch (IOException ignored) {
+        }
     }
 }

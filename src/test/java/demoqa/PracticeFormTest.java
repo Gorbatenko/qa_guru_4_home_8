@@ -39,6 +39,8 @@ public class PracticeFormTest {
         Configuration.browserSize = "1540x1080";
         Configuration.browser = System.getProperty("browser", "chrome");
         Configuration.remote = "https://user1:1234@selenoid.autotests.cloud:4444/wd/hub/";
+
+        setEnvironmentAllure("browser",Configuration.browser);
     }
 
     @AfterEach
