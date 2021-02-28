@@ -6,10 +6,7 @@ import com.codeborne.selenide.logevents.SelenideLogger;
 import com.github.javafaker.Faker;
 import io.qameta.allure.*;
 import io.qameta.allure.selenide.AllureSelenide;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.text.DateFormatSymbols;
@@ -56,6 +53,7 @@ public class PracticeFormTest {
     @Owner("GorbatenkoVA")
     @Severity(CRITICAL)
     @Link(name = "Base URL", value = BASE_URL)
+    @Tag("positive")
     @Feature("Registration form")
     @Story("Успешная регистрация")
     @DisplayName("Успешная регистрация рандомного студента.")
@@ -103,11 +101,10 @@ public class PracticeFormTest {
 
         step("Заполнение даты рождения " + dayOfBirth + " " + monthOfBirth + " " + yearOfBirth, () -> {
             $("#dateOfBirthInput").click();
-            $(".react-datepicker__year-select").click();
-            $$(".react-datepicker__year-select option").find(value(yearOfBirth)).click();
-            $(".react-datepicker__month-select").click();
-            $$(".react-datepicker__month-select option").find(text(monthOfBirth)).click();
-            $$(".react-datepicker__day").filter(not(cssClass(".react-datepicker__day--outside-month")))
+            $(".react-datepicker__year-select").selectOption(yearOfBirth);
+            $(".react-datepicker__month-select").selectOption(monthOfBirth);
+            $$(".react-datepicker__day--0" + String.format("%02d", date.get(Calendar.DAY_OF_MONTH)))
+                    .filter(not(cssClass(".react-datepicker__day--outside-month")))
                     .find(text(dayOfBirth)).click();
         });
 
@@ -158,6 +155,7 @@ public class PracticeFormTest {
     @Test
     @Owner("GorbatenkoVA")
     @Link(name = "Base URL", value = BASE_URL)
+    @Tag("negative")
     @Feature("Registration form")
     @Story("Неуспешная регистрация")
     @DisplayName("Негативный тест.")

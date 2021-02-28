@@ -43,3 +43,9 @@ test {
         html.enabled = true
     }
 }
+
+task negative_test(type: Test) {
+    useJUnitPlatform {
+        includeTags 'negative'
+    }
+}
