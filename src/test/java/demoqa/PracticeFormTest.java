@@ -37,6 +37,7 @@ public class PracticeFormTest {
         capabilities.setCapability("enableVideo", true);
         Configuration.browserCapabilities = capabilities;
         Configuration.browserSize = "1540x1080";
+        Configuration.browser = System.getProperty("browser", "chrome");
         Configuration.remote = "https://user1:1234@selenoid.autotests.cloud:4444/wd/hub/";
     }
 
