@@ -104,8 +104,7 @@ public class PracticeFormTest {
             $(".react-datepicker__year-select").selectOption(yearOfBirth);
             $(".react-datepicker__month-select").selectOption(monthOfBirth);
             $$(".react-datepicker__day--0" + String.format("%02d", date.get(Calendar.DAY_OF_MONTH)))
-                    .filter(not(cssClass(".react-datepicker__day--outside-month")))
-                    .find(text(dayOfBirth)).click();
+                    .filter(not(cssClass(".react-datepicker__day--outside-month"))).find(text(dayOfBirth)).click();
         });
 
         step("Выбор предметов " + subjects, () -> {
