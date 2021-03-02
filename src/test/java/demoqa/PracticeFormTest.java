@@ -51,7 +51,6 @@ public class PracticeFormTest {
         attachVideo();
         attachPageSource();
         attachScreenshot("Last screenshot");
-        attachAsText("Browser console logs", getConsoleLogs());
         closeWebDriver();
     }
 
