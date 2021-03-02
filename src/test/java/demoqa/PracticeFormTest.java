@@ -31,16 +31,18 @@ public class PracticeFormTest {
     @BeforeEach
     void setUp() {
         SelenideLogger.addListener("allure", new AllureSelenide());
-
-        DesiredCapabilities capabilities = new DesiredCapabilities();
-        capabilities.setCapability("enableVNC", true);
-        capabilities.setCapability("enableVideo", true);
-        Configuration.browserCapabilities = capabilities;
         Configuration.browserSize = "1540x1080";
         Configuration.browser = System.getProperty("browser", "chrome");
-        Configuration.remote = "https://user1:1234@selenoid.autotests.cloud:4444/wd/hub/";
+        setEnvironmentAllure("browser", Configuration.browser);
 
-        setEnvironmentAllure("browser",Configuration.browser);
+        if (System.getProperty("remote_driver") != null) {
+            DesiredCapabilities capabilities = new DesiredCapabilities();
+            capabilities.setCapability("enableVNC", true);
+            capabilities.setCapability("enableVideo", true);
+            Configuration.browserCapabilities = capabilities;
+            Configuration.remote = System.getProperty("remote_driver");
+            setEnvironmentAllure("selenoid", System.getProperty("selenoid"));
+        }
     }
 
     @AfterEach

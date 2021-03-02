@@ -22,7 +22,7 @@ allure {
 }
 
 dependencies {
-    testImplementation (
+    testImplementation(
             "com.codeborne:selenide:$selenideVersion",
             "io.qameta.allure:allure-java-commons:$allureVersion",
             "io.qameta.allure:allure-selenide:$allureVersion",
@@ -51,5 +51,11 @@ test {
 task negative_test(type: Test) {
     useJUnitPlatform {
         includeTags 'negative'
+    }
+}
+
+task positive_test(type: Test) {
+    useJUnitPlatform {
+        includeTags 'positive'
     }
 }
