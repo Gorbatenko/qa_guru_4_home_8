@@ -33,6 +33,7 @@ public class PracticeFormTest {
         SelenideLogger.addListener("allure", new AllureSelenide());
         Configuration.browserSize = "1540x1080";
         Configuration.browser = System.getProperty("browser", "chrome");
+        setEnvironmentAllure("task", System.getProperty("task", "test"));
         setEnvironmentAllure("browser", Configuration.browser);
 
         if (System.getProperty("remote_driver") != null) {
