@@ -71,7 +71,7 @@ public class PracticeFormTest {
         String gender = randomValueFromVariant("Male", "Female", "Other");
         String userNumber = faker.phoneNumber().subscriberNumber(10);
         String dayOfBirth = String.valueOf(date.get(Calendar.DAY_OF_MONTH));
-        String monthOfBirth = String.valueOf(new DateFormatSymbols(Locale.ENGLISH).getMonths()[date.get(Calendar.MONTH) - 1]);
+        String monthOfBirth = String.valueOf(new DateFormatSymbols(Locale.ENGLISH).getMonths()[date.get(Calendar.MONTH)]);
         String yearOfBirth = String.valueOf(date.get(Calendar.YEAR));
         List<String> subjects = randomValuesFromVariant("Physics", "History", "Economics");
         List<String> hobbies = randomValuesFromVariant("Sports", "Reading", "Music");
